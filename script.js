@@ -2,26 +2,46 @@ var colorsequence = [];
 var usersequence = [];
 var gamestarted = false;
 $('#green').click(green);
-$('#red').click(red); 
+$('#red').click(red);
 $('#yellow').click(yellow);
 $('#blue').click(blue);
 
-$(document).keypress(function(event) {
-    gamestart();
+$(document).keypress(function (event) {
+        if (event.key === 'g' || event.key === 'G') {
+            green();
+        }
+        else if (event.key === 'r' || event.key === 'R') {
+            red();
+        }
+        else if (event.key === 'y' || event.key === 'Y') {
+            yellow();
+        }
+        else if (event.key === 'b' || event.key === 'B') {
+            blue();
+        }
+        else if(!gamestarted) {
+            gamestart();
+        }
+    }
+)
+$(document).on('click',function(){
+    if (!gamestarted) {
+        gamestart();
+    }
 })
 
 function gamestart() {
     colorsequence = [];
     usersequence = [];
     gamestarted = true;
-    
+
     nextSequence(1);
 }
 function nextSequence(level) {
     usersequence = [];
     var randomColor = blink();
     colorsequence.push(randomColor);
-    
+
     $('#level-title').text('Level ' + level + ' - Watch the sequence');
     showSequence(0);
 }
@@ -31,10 +51,10 @@ function showSequence(index) {
         $('#' + color).addClass('pressed');
         var sound = new Audio('./sounds/' + color + '.mp3');
         sound.play();
-        setTimeout(function() {
-        $('#'+color).removeClass('pressed');
-    }, 100);
-        setTimeout(function() {
+        setTimeout(function () {
+            $('#' + color).removeClass('pressed');
+        }, 100);
+        setTimeout(function () {
             showSequence(index + 1);
         }, 500);
     }
@@ -43,11 +63,12 @@ function showSequence(index) {
     }
 }
 function checkSequence() {
-    for(var i = 0; i < usersequence.length; i++) {
+    for (var i = 0; i < usersequence.length; i++) {
         if (usersequence[i] !== colorsequence[i]) {
-            $('#level-title').text('Game Over, Press Any Key to Restart');
+            gamestarted = false;
+            $('#level-title').text('Game Over, Press Any Key to Restart');  
             $('body').addClass('game-over');
-            setTimeout(function() {
+            setTimeout(function () {
                 $('body').removeClass('game-over');
             }, 200);
             var gameover = new Audio('./sounds/wrong.mp3');
@@ -57,65 +78,65 @@ function checkSequence() {
             return;
         }
     }
-    if( usersequence.length === colorsequence.length) {
-        setTimeout(function() {
+    if (usersequence.length === colorsequence.length) {
+        setTimeout(function () {
             nextSequence(colorsequence.length + 1);
         }, 1000);
     }
-    
+
 }
-function blink(){
-    var color=['green', 'red', 'yellow', 'blue'];
+function blink() {
+    var color = ['green', 'red', 'yellow', 'blue'];
     var randomColor = color[Math.floor(Math.random() * color.length)];
     return randomColor;
 }
 
 
-function red(){
+function red() {
     $('#red').addClass('pressed');
-    setTimeout(function() {
+    setTimeout(function () {
         $('#red').removeClass('pressed');
     }, 100);
-    var red=new Audio('./sounds/red.mp3');
+    var red = new Audio('./sounds/red.mp3');
     red.play();
     usersequence.push('red');
-    if(gamestarted){
+    if (gamestarted) {
         checkSequence();
     }
 }
-function blue(){
+function blue() {
     $('#blue').addClass('pressed');
-    setTimeout(function() {
+    setTimeout(function () {
         $('#blue').removeClass('pressed');
     }, 100);
-    var blue=new Audio('./sounds/blue.mp3');
+    var blue = new Audio('./sounds/blue.mp3');
     blue.play();
     usersequence.push('blue');
-    if(gamestarted){
+    if (gamestarted) {
         checkSequence();
     }
 }
-function yellow(){
+function yellow() {
     $('#yellow').addClass('pressed');
-    setTimeout(function() {
+    setTimeout(function () {
         $('#yellow').removeClass('pressed');
     }, 100);
-    var yellow=new Audio('./sounds/yellow.mp3');
+    var yellow = new Audio('./sounds/yellow.mp3');
     yellow.play();
     usersequence.push('yellow');
-    if(gamestarted){
+    if (gamestarted) {
         checkSequence();
     }
 }
-function green(){
+function green() {
     $('#green').addClass('pressed');
-    setTimeout(function() {
+    setTimeout(function () {
         $('#green').removeClass('pressed');
     }, 100);
-    var green=new Audio('./sounds/green.mp3');
+    var green = new Audio('./sounds/green.mp3');
     green.play();
     usersequence.push('green');
-    if(gamestarted){
+    if (gamestarted) {
         checkSequence();
     }
 }
